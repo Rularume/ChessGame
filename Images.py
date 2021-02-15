@@ -21,9 +21,21 @@ piecescale=(int(squarelen*SHIFT),int(squarelen*SHIFT))
 
 logo= load(pieces_folder,'cn',piecescale)[0]
 
+Tb= load(pieces_folder,'tb',piecescale)
 Cb= load(pieces_folder,'cb',piecescale)
-Pn= load(pieces_folder,'pn',piecescale)
+Fb= load(pieces_folder,'fb',piecescale)
+Db= load(pieces_folder,'db',piecescale)
+Rb= load(pieces_folder,'rb',piecescale)
+
 Pb= load(pieces_folder,'pb',piecescale)
+
+Tn= load(pieces_folder,'tn',piecescale)
+Cn= load(pieces_folder,'cn',piecescale)
+Fn= load(pieces_folder,'fn',piecescale)
+Dn= load(pieces_folder,'dn',piecescale)
+Rn= load(pieces_folder,'rn',piecescale)
+
+Pn= load(pieces_folder,'pn',piecescale)
 
 
 ###Archer###

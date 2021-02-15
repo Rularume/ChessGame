@@ -6,6 +6,7 @@ pygame.init()
 
 clock = pygame.time.Clock()
 pygame.display.set_icon(logo)
+pygame.display.set_caption('Sacochade')
 screen=pygame.display.set_mode(size)
 
 #screen=pygame.display.set_mode((1920, 1080))
@@ -26,7 +27,7 @@ def Background():
             if (i+j)%2==0:
                 pygame.draw.rect(screen,WHITE,(xshift+i*squarelen,j*squarelen,squarelen,squarelen))
             else:
-                pygame.draw.rect(screen,BLACK,(xshift+i*squarelen,j*squarelen,squarelen,squarelen))
+                pygame.draw.rect(screen,BROWN,(xshift+i*squarelen,j*squarelen,squarelen,squarelen))
     
 
 def Indicator(x,y,select):
@@ -43,7 +44,7 @@ def DrawPieces():
 
 def ShowMovements(pointed,color):
     if pointed!=None:
-        for elmts in pointed.Movements():
+        for elmts in pointed.Allowed(L):
             pygame.draw.circle(screen,color,Center(*elmts),squarelen/8)
     
 def __Game__():

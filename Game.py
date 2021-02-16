@@ -46,6 +46,28 @@ def ShowMovements(pointed,color):
     if pointed!=None:
         for elmts in pointed.Allowed(L):
             pygame.draw.circle(screen,color,Center(*elmts),squarelen/8)
+        
+        for elmts in pointed.Eat(L):
+            pygame.draw.circle(screen,(0,0,255),Center(*elmts),squarelen/8)
+
+
+def SwapPiece(source,destination):
+    if destination in source.Allowed(L):
+        print("Swaped",source.name,source.pos,"to",destination)
+        source.Swap(destination)
+    elif source.pos==destination:
+        print("got currented")
+        return source
+    elif destination in source.Eat(L):
+        print(source.name,"eat ",Reverse(L,*destination).name)
+        L.remove(Reverse(L,*destination))
+        source.Swap(destination)
+    elif Indexer(L,*PiecetoPix(*destination))!=None:
+        print(Indexer(L,*PiecetoPix(*destination)).name)
+        return Indexer(L,*PiecetoPix(*destination))
+    else:
+        print("out of range")
+    return None
     
 def __Game__():
     
@@ -60,10 +82,12 @@ def __Game__():
         keys = pygame.key.get_pressed()
         mouse = pygame.mouse.get_pressed()
         x,y=pygame.mouse.get_pos()
-        #print(x,y)
 
         if mouse[0]:
-            select=Indexer(L,x,y)
+            if select!=None:
+                select = SwapPiece(select,pointed(x,y))
+            else:
+                select=Indexer(L,x,y)
             pygame.time.delay(100)
       
         redraw_window(x,y,select)

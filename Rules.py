@@ -1,10 +1,20 @@
 from Images import *
 
-def Occupied(L,i,j):
+def InGrid(i,j):
+    return (i<0 or i>7 or j<0 or j>7)
+
+def Reverse(L,i,j):
     for elmt in L:
-        if i<0 or i>7 or j<0 or j>7 or elmt.pos==(i,j):
+        if elmt.pos==(i,j):
+            return elmt
+    return None
+
+def Occupied(L,i,j):
+    if InGrid(i,j) or Reverse(L,i,j)!=None:
             return True
     return False
+
+
 
 class Piece():
     def __init__(self,i,j,name,piece,color):
@@ -15,6 +25,18 @@ class Piece():
         self.zoom=piece[1]
     def Allowed(self,L):
         return [self.pos]
+    def Eat(self,L):
+        return[]
+    def Swap(self,pos):
+        self.pos=pos
+    def Opponement(self,L,target,result):
+        if self.White:
+            if Reverse(L,*target)!=None and not(Reverse(L,*target).White):
+                result.append(target)
+        else:
+            if Reverse(L,*target)!=None and (Reverse(L,*target).White):
+                result.append(target)
+        return result
 
 
 class Pawn(Piece):
@@ -48,6 +70,20 @@ class Pawn(Piece):
                     result.append((self.pos[0],self.pos[1]+1))
         return(result)
 
+    def Eat(self,L):
+        result=[]
+        if self.White:
+            for k in range(-1,2,2):
+                target=(self.pos[0]+k,self.pos[1]-1)
+                if Occupied(L,*target) and Reverse(L,*target)!=None and not(Reverse(L,*target).White):
+                    result.append(target)
+        else:
+            for k in range(-1,2,2):
+                target=(self.pos[0]+k,self.pos[1]+1)
+                if Occupied(L,*target) and Reverse(L,*target)!=None and (Reverse(L,*target).White):
+                    result.append(target)
+        return result
+
 class King(Piece):
     """ def Movements(self):
         return[(self.pos[0]+i,self.pos[1]+j) for i in range(-1,2) for j in range(-1,2) if i!=0 or j!=0]   """ 
@@ -60,6 +96,14 @@ class King(Piece):
                     result.append((self.pos[0]+i,self.pos[1]+j))
         return result
 
+    def Eat(self,L):
+        result=[]
+        for i in range(-1,2):
+            for j in range(-1,2):
+                target=self.pos[0]+i,self.pos[1]+j
+                if (j!=0 or i!=0) and (Occupied(L,*target)):
+                    result=self.Opponement(L,target,result)
+        return result
 class Queen(Piece):
     """ def Movements(self):
         return([(self.pos[0]+i,self.pos[1]+j) for i in range(-7,8) for j in range(-7,8) if (i==0 and j!=0) or (j==0 and i!=0) or (abs(i)-abs(j))==0])
@@ -109,6 +153,50 @@ class Queen(Piece):
                 break
         return result
 
+    def Eat(self,L):
+        result=[]
+        for i in range(1,8):
+            target=self.pos[0]+i,self.pos[1]
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0]-i,self.pos[1]
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0],self.pos[1]+i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0],self.pos[1]-i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0]+i,self.pos[1]+i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0]+i,self.pos[1]-i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0]-i,self.pos[1]+i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0]-i,self.pos[1]-i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        return result
+
 class Rook(Piece):
     def Allowed(self,L):
         result=[]
@@ -131,6 +219,30 @@ class Rook(Piece):
             if not(Occupied(L,self.pos[0],self.pos[1]-j)):
                 result.append((self.pos[0],self.pos[1]-j))
             else:
+                break
+        return result
+
+    def Eat(self,L):
+        result=[]
+        for i in range(1,8):
+            target=self.pos[0]+i,self.pos[1]
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0]-i,self.pos[1]
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0],self.pos[1]+i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0],self.pos[1]-i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
                 break
         return result
 
@@ -160,6 +272,30 @@ class Bishop(Piece):
                 break
         return result
 
+    def Eat(self,L):
+        result=[]
+        for i in range(1,8):
+            target=self.pos[0]+i,self.pos[1]+i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0]+i,self.pos[1]-i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0]-i,self.pos[1]+i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        for i in range(1,8):
+            target=self.pos[0]-i,self.pos[1]-i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+                break
+        return result
+
 
 class Knight(Piece):
     def Allowed(self,L):
@@ -179,31 +315,53 @@ class Knight(Piece):
                 result.append((self.pos[0]+j,self.pos[1]-i))
         return result
 
+    def Eat(self,L):
+        result=[]
+        i=-2
+        for j in range(-1,2,2):
+            target=self.pos[0]+i,self.pos[1]+j
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+
+            target=self.pos[0]+j,self.pos[1]+i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+
+            target=self.pos[0]-i,self.pos[1]+j
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+
+            target=self.pos[0]+j,self.pos[1]-i
+            if Occupied(L,*target):
+                result=self.Opponement(L,target,result)
+        return result
 
 
 class chess():
     def __init__(self):
         self.L=[]
+        self.L.append(Rook(0,0,"Black Rook",Tn,False))
+        self.L.append(Knight(1,0,"Black Knight",Cn,False))
+        self.L.append(Bishop(2,0,"Black Bishop",Fn,False))
+        self.L.append(Queen(3,0,"Black Queen",Dn,False))
+        self.L.append(King(4,0,"Black King",Rn,False))
+        self.L.append(Bishop(5,0,"Black Bishop",Fn,False))
+        self.L.append(Knight(6,0,"Black Knight",Cn,False))
+        self.L.append(Rook(7,0,"Black Rook",Tn,False))
         for k in range(8):
-            self.L.append(Rook(0,0,"Black Rook",Tn,False))
-            self.L.append(Knight(1,0,"Black Knight",Cn,False))
-            self.L.append(Bishop(2,0,"Black Bishop",Fn,False))
-            self.L.append(Queen(3,0,"Black Queen",Dn,False))
-            self.L.append(King(4,0,"Black King",Rn,False))
-            self.L.append(Bishop(5,0,"Black Bishop",Fn,False))
-            self.L.append(Knight(6,0,"Black Knight",Cn,False))
-            self.L.append(Rook(7,0,"Black Rook",Tn,False))
             self.L.append(Pawn(k,1,"Black Pawn",Pn,False))
 
-            self.L.append(Rook(0,7,"White Rook",Tb,True))
-            self.L.append(Knight(1,7,"White Knight",Cb,True))
-            self.L.append(Bishop(2,7,"White Bishop",Fb,True))
-            self.L.append(Queen(3,7,"White Queen",Db,True))
-            self.L.append(King(4,7,"White King",Rb,True))
-            self.L.append(Bishop(5,7,"White Bishop",Fb,True))
-            self.L.append(Knight(6,7,"White Knight",Cb,True))
-            self.L.append(Rook(7,7,"White Rook",Tb,True))
+        self.L.append(Rook(0,7,"White Rook",Tb,True))
+        self.L.append(Knight(1,7,"White Knight",Cb,True))
+        self.L.append(Bishop(2,7,"White Bishop",Fb,True))
+        self.L.append(Queen(3,7,"White Queen",Db,True))
+        self.L.append(King(4,7,"White King",Rb,True))
+        self.L.append(Bishop(5,7,"White Bishop",Fb,True))
+        self.L.append(Knight(6,7,"White Knight",Cb,True))
+        self.L.append(Rook(7,7,"White Rook",Tb,True))
+        for k in range(8):
             self.L.append(Pawn(k,6,"White Pawn",Pb,True))
+
             
         
 

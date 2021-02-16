@@ -22,3 +22,6 @@ def PiecetoPix(i,j):
 
 def Center(i,j):
     return((i+0.5)*squarelen+xshift,(j+0.5)*squarelen)
+
+def Corner(i,j):
+    return(i*squarelen+xshift,j*squarelen)

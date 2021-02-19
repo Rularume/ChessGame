@@ -25,3 +25,9 @@ def Center(i,j):
 
 def Corner(i,j):
     return(i*squarelen+xshift,j*squarelen)
+
+def BlackKing(L):
+    return [elmt for elmt in L if elmt.name=="Black King"][0]
+
+def WhiteKing(L):
+    return [elmt for elmt in L if elmt.name=="White King"][0]

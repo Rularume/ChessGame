@@ -101,25 +101,15 @@ def __Game__():
 
         if mouse[0]:
             if select!=None:
-                """ if select.White and turn%2==0:
-                    print("Je suis blanc et legit")
-                elif not(select.White) and turn%2==1:
-                    print("Je suis noir et legit")
-                else:
-                    print("non legit") """
                 if (select.White and turn%2==1) or (not(select.White) and turn%2==0):
                     select=None
-                    break
-                select,turn = SwapPiece(select,pointed(x,y),turn)
+                else:
+                    select,turn = SwapPiece(select,pointed(x,y),turn)
+                    BlackKing(L).Echec(L)
+                    WhiteKing(L).Echec(L)
             else:
                 select=Indexer(L,x,y)
                 if select!=None:
-                    """ if select.White and turn%2==0:
-                        print("Je suis blanc et legit")
-                    elif not(select.White) and turn%2==1:
-                        print("Je suis noir et legit")
-                    else:
-                        print("non legit") """
                     if (select.White and turn%2==1) or (not(select.White) and turn%2==0):
                         select=None
             pygame.time.delay(100)

@@ -37,6 +37,8 @@ class Piece():
             if Reverse(L,*target)!=None and (Reverse(L,*target).White):
                 result.append(target)
         return result
+    def Test(self,L):
+        return []
 
 
 class Pawn(Piece):
@@ -104,6 +106,18 @@ class King(Piece):
                 if (j!=0 or i!=0) and (Occupied(L,*target)):
                     result=self.Opponement(L,target,result)
         return result
+    def Test(self,L):
+        return [elmt.name for elmt in L]
+
+    def Echec(self,L):
+        if self.White:
+            print([self.pos] in [elmt.Eat(L) for elmt in L if not(elmt.White)])
+        else:
+            print([self.pos] in [elmt.Eat(L) for elmt in L if elmt.White])
+        """ print("White",[elmt.Eat(L) for elmt in L if elmt.White], )
+        print("Black",[elmt.Eat(L) for elmt in L if not(elmt.White)],self.pos) """
+        return any(self.pos in [elmt.Eat(L)] for elmt in L)
+
 class Queen(Piece):
     """ def Movements(self):
         return([(self.pos[0]+i,self.pos[1]+j) for i in range(-7,8) for j in range(-7,8) if (i==0 and j!=0) or (j==0 and i!=0) or (abs(i)-abs(j))==0])
@@ -350,6 +364,7 @@ class chess():
         self.L.append(Rook(7,0,"Black Rook",Tn,False))
         for k in range(8):
             self.L.append(Pawn(k,1,"Black Pawn",Pn,False))
+            self.L.append(Pawn(k,6,"White Pawn",Pb,True))
 
         self.L.append(Rook(0,7,"White Rook",Tb,True))
         self.L.append(Knight(1,7,"White Knight",Cb,True))
@@ -359,8 +374,6 @@ class chess():
         self.L.append(Bishop(5,7,"White Bishop",Fb,True))
         self.L.append(Knight(6,7,"White Knight",Cb,True))
         self.L.append(Rook(7,7,"White Rook",Tb,True))
-        for k in range(8):
-            self.L.append(Pawn(k,6,"White Pawn",Pb,True))
 
             
         

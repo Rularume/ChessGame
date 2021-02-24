@@ -115,7 +115,7 @@ def __Game__():
                     #print("test mat",turn%2==0, WK.Echec(L), [not(any([Anyone(L,elmt) for elmt in L if elmt.White]))][0])
                     #print("test mat Black",turn%2==1, BK.Echec(L), not(any(unpack([Anyone(L,elmt)for elmt in L if not(elmt.White)]))))
                     if turn%2==1 and not(any(unpack([Anyone(L,elmt)for elmt in L if (elmt.White)]))):
-                        if and WK.Echec(L):
+                        if WK.Echec(L):
                             print("Mat Blanc")
                         else:
                             print("Pat")

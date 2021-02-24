@@ -1,5 +1,5 @@
 from Images import *
-
+from copy import copy,deepcopy
 def InGrid(i,j):
     return (i<0 or i>7 or j<0 or j>7)
 
@@ -13,6 +13,13 @@ def Occupied(L,i,j):
     if InGrid(i,j) or Reverse(L,i,j)!=None:
             return True
     return False
+
+def unpack(L):
+    res= []
+    for elmt in L:
+        for k in range(len(elmt)):
+            res.append(elmt[k])
+    return res
 
 
 
@@ -111,12 +118,11 @@ class King(Piece):
 
     def Echec(self,L):
         if self.White:
-            print([self.pos] in [elmt.Eat(L) for elmt in L if not(elmt.White)])
+            #print("White King",self.pos in unpack([elmt.Eat(L) for elmt in L if not(elmt.White)]),unpack([elmt.Eat(L) for elmt in L if not(elmt.White)]),self.pos )
+            return self.pos in unpack([elmt.Eat(L) for elmt in L if not(elmt.White)])
         else:
-            print([self.pos] in [elmt.Eat(L) for elmt in L if elmt.White])
-        """ print("White",[elmt.Eat(L) for elmt in L if elmt.White], )
-        print("Black",[elmt.Eat(L) for elmt in L if not(elmt.White)],self.pos) """
-        return any(self.pos in [elmt.Eat(L)] for elmt in L)
+            #print("Black King",self.pos in unpack([elmt.Eat(L) for elmt in L if (elmt.White)]),unpack([elmt.Eat(L) for elmt in L if (elmt.White)]),self.pos)
+            return self.pos in unpack([elmt.Eat(L) for elmt in L if (elmt.White)])
 
 class Queen(Piece):
     """ def Movements(self):

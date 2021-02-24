@@ -31,3 +31,26 @@ def BlackKing(L):
 
 def WhiteKing(L):
     return [elmt for elmt in L if elmt.name=="White King"][0]
+
+
+def NextWorld(L,piece,dest,eat=False):
+    if piece!=None:
+        eatable=Indexer(L,*PiecetoPix(*dest))
+        if eat and eatable!=None:
+            eatable.White= not(eatable.White)
+        Temp=copy(piece.pos)
+        piece.Swap(dest)
+        #print(Temp,piece.pos)
+        if piece.White:
+            res= WhiteKing(L).Echec(L)
+        else:
+            res= BlackKing(L).Echec(L)
+        piece.Swap(Temp)
+        if eat:
+            eatable.White= not(eatable.White)
+        return not(res)
+    return True
+
+
+def Anyone(L,piece):
+    return [NextWorld(L,piece,elmts) for elmts in (piece.Allowed(L)+piece.Eat(L))]

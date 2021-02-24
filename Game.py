@@ -114,11 +114,16 @@ def __Game__():
                     #print(unpack([Anyone(L,elmt)for elmt in L if not(elmt.White)]))
                     #print("test mat",turn%2==0, WK.Echec(L), [not(any([Anyone(L,elmt) for elmt in L if elmt.White]))][0])
                     #print("test mat Black",turn%2==1, BK.Echec(L), not(any(unpack([Anyone(L,elmt)for elmt in L if not(elmt.White)]))))
-                    if turn%2==1 and WK.Echec(L) and not(any(unpack([Anyone(L,elmt)for elmt in L if (elmt.White)]))):
-                        print("Mat Blanc")
-
-                    if turn%2==1 and BK.Echec(L) and not(any(unpack([Anyone(L,elmt)for elmt in L if not(elmt.White)]))):
-                        print("Mat black")
+                    if turn%2==1 and not(any(unpack([Anyone(L,elmt)for elmt in L if (elmt.White)]))):
+                        if and WK.Echec(L):
+                            print("Mat Blanc")
+                        else:
+                            print("Pat")
+                    if turn%2==1 and not(any(unpack([Anyone(L,elmt)for elmt in L if not(elmt.White)]))):
+                        if BK.Echec(L):
+                            print("Mat Noir")
+                        else:
+                            print("Pat")
             else:
                 select=Indexer(L,x,y)
                 if select!=None:

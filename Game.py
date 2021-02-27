@@ -45,37 +45,29 @@ def DrawPieces():
 
 def ShowMovements(pointed,color,turn):
     if pointed!=None:
-        
-        if pointed.White and turn%2==0:
-            for elmts in pointed.Allowed(L):
-                if NextWorld(L,pointed,elmts):
-                    pygame.draw.circle(screen,color,Center(*elmts),squarelen/8)
+        research=pointed.Cases(L)
+        for elmts in research[0]:
+            if NextWorld(L,pointed,elmts) and (pointed.White and turn%2==0 or not(pointed.White) and turn%2==1):
+                pygame.draw.circle(screen,color,Center(*elmts),squarelen/8)
             
-            for elmts in pointed.Eat(L):
-                if NextWorld(L,pointed,elmts,True):
-                    pygame.draw.circle(screen,color,Center(*elmts),squarelen*0.45,3)
-        elif not(pointed.White) and turn%2==1:
-            for elmts in pointed.Allowed(L):
-                if NextWorld(L,pointed,elmts):
-                    pygame.draw.circle(screen,color,Center(*elmts),squarelen/8)
-            
-            for elmts in pointed.Eat(L):
-                if NextWorld(L,pointed,elmts,True):
-                    pygame.draw.circle(screen,color,Center(*elmts),squarelen*0.45,3)
+        for elmts in research[1]:
+            if NextWorld(L,pointed,elmts,True) and (pointed.White and turn%2==0 or not(pointed.White) and turn%2==1):
+                pygame.draw.circle(screen,color,Center(*elmts),squarelen*0.45,3)
         
 
 
 def SwapPiece(source,destination,turn):
+    research=source.Cases(L)
     if destination==None:
         return None,turn
-    elif destination in source.Allowed(L):
+    elif destination in research[0] and NextWorld(L,source,destination):
         #print("Swaped",source.name,source.pos,"to",destination)
         source.Swap(destination)
         return None,turn+1
     elif source.pos==destination:
         #print("got currented")
         return source,turn
-    elif destination in source.Eat(L):
+    elif destination in research[1] and NextWorld(L,source,destination,True):
         #print(source.name,"eat",Reverse(L,*destination).name)
         L.remove(Reverse(L,*destination))
         source.Swap(destination)
@@ -102,7 +94,6 @@ def __Game__():
         keys = pygame.key.get_pressed()
         mouse = pygame.mouse.get_pressed()
         x,y=pygame.mouse.get_pos()
-
         if mouse[0]:
             if select!=None:
                 if (select.White and turn%2==1) or (not(select.White) and turn%2==0):

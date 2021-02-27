@@ -33,6 +33,9 @@ def WhiteKing(L):
     return [elmt for elmt in L if elmt.name=="White King"][0]
 
 
+def GiveMe(L,name):
+    return [elmt for elmt in L if elmt.name==name][0]
+
 def NextWorld(L,piece,dest,eat=False):
     if piece!=None:
         eatable=Indexer(L,*PiecetoPix(*dest))
@@ -52,5 +55,8 @@ def NextWorld(L,piece,dest,eat=False):
     return True
 
 
+def Add(lists):
+    return lists[0]+lists[1]
+
 def Anyone(L,piece):
-    return [NextWorld(L,piece,elmts) for elmts in (piece.Allowed(L)+piece.Eat(L))]
+    return [NextWorld(L,piece,elmts) for elmts in (Add(piece.Cases(L)))]
